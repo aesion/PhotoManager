@@ -1,0 +1,85 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:ClipSquareImageView="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#f2ffffff">
+
+
+    <com.pulamsi.photomanager.widght.fitsystemwindowlayout.NineCutView
+        android:id="@+id/nineCutView"
+        ClipSquareImageView:ClipSquareIV_BorderDistance="10dp"
+        ClipSquareImageView:ClipSquareIV_OutsideColor="#f2ffffff"
+        ClipSquareImageView:ClipSquareIV_BorderColor="@android:color/transparent"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_mask"
+        android:overScrollMode="never"
+        android:background="@color/font"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"/>
+
+
+    <LinearLayout
+        android:background="?attr/colorPrimary"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+
+        <LinearLayout
+            android:id="@+id/ll_mask"
+            android:layout_weight="1"
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="?android:attr/selectableItemBackground"
+            android:orientation="vertical">
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                       android:layout_marginBottom="4dp"
+                android:src="@mipmap/ic_nine_graph"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                          android:text="形 状"
+                    />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_fiter"
+            android:layout_weight="1"
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="?android:attr/selectableItemBackground"
+            android:orientation="vertical">
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                       android:layout_marginBottom="4dp"
+                       android:src="@mipmap/ic_nine_fiter"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textColor="@color/white"
+                      android:text="滤 镜"
+                />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/ll_save"
+            android:layout_weight="1"
+            android:layout_width="0dp" android:layout_height="match_parent"
+                      android:gravity="center"
+            android:background="?android:attr/selectableItemBackground"
+                      android:orientation="vertical">
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                       android:layout_marginBottom="4dp"
+                       android:src="@mipmap/ic_nine_save"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:textColor="@color/white"
+                      android:text="保 存"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

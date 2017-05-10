@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PreferenceScreen
+    android:layout="@layout/preference_item"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <PreferenceCategory
+        android:layout="@layout/preference_category_widget"
+        android:title="基本设置">
+
+        <CheckBoxPreference
+            android:layout="@layout/preference_item"
+            android:title="省流量模式"
+            android:key="ProvinceTraffic"
+            android:summaryOn="仅在Wi-Fi环境下才自动加载图片"
+            android:summaryOff="任何环境都自动加载图片"
+            android:widgetLayout="@layout/switch_layout"
+            android:defaultValue="false"/>
+
+        <Preference
+            android:key="cache"
+            android:layout="@layout/preference_item"
+            android:title="清除缓存"
+            android:summary="清除缓存的内容及图片">
+        </Preference>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preference_category_widget"
+        android:title="帮助">
+
+        <Preference
+            android:key="feedback"
+            android:layout="@layout/preference_item"
+            android:title="意见反馈">
+        </Preference>
+
+        <Preference
+            android:key="update"
+            android:layout="@layout/preference_item"
+            android:title="检查更新">
+        </Preference>
+
+
+        <Preference
+            android:key="share"
+            android:layout="@layout/preference_item"
+            android:title="分享APP">
+        </Preference>
+
+        <Preference
+            android:key="about"
+            android:layout="@layout/preference_item"
+            android:title="关于">
+        </Preference>
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:layout="@layout/preference_category_widget"
+        android:title="其他">
+
+        <Preference
+            android:key="exit"
+            android:layout="@layout/preference_item"
+            android:title="退出登陆">
+        </Preference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

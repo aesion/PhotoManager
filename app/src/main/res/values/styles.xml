@@ -1,0 +1,44 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Base.Theme.PhotoManger">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Base.Theme.PhotoManger" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/app_Primary</item>
+        <item name="colorPrimaryDark">@color/app_Primary</item>
+        <item name="colorAccent">@color/window_background</item>
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
+
+    <style name="BottomDialogStyle" parent="Theme.Design.BottomSheetDialog">
+        <!--是否去除标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!--是否去除边框-->
+        <item name="android:windowFrame">@null</item>
+        <!--背景不变暗-->
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="radio_item">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:background">@drawable/bg_radio_button</item>
+    </style>
+
+    <style name="load_dialog" parent="@android:style/Theme.Dialog">
+        <!--背景颜色及和透明程度-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--是否去除标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!--是否去除边框-->
+        <!--是否浮现在activity之上-->
+        <item name="android:windowIsFloating">true</item>
+        <!--这属性 造成 设置的Layout 的宽度 设置为match_parent 失效。-->
+        <!--是否模糊-->
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+
+</resources>
