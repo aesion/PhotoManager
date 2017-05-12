@@ -1,0 +1,19 @@
+package com.pulamsi.photomanager.base;
+
+/**
+ * User: Daidingkang(ddk19941017@Gmail.com)
+ * Date: 2017-01-04
+ * Time: 10:17
+ * FIXME
+ */
+public class Constants {
+
+    public static String MID;
+
+    public static boolean IS_LOGIN;
+
+    public static String IMG_URL;
+
+    public static String NAME;
+
+}

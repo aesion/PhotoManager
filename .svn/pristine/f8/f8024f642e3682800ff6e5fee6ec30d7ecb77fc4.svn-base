@@ -1,0 +1,51 @@
+package com.pulamsi.photomanager.utils;
+
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+
+import com.pulamsi.photomanager.bean.Galleryclass;
+
+import java.util.List;
+
+/**
+ * User: Daidingkang(ddk19941017@Gmail.com)
+ * Date: 2017-01-12
+ * Time: 14:49
+ * FIXME
+ */
+public class OtherUtils {
+    /**
+     * 获取两个List的不同元素
+     * curlist必须包含prelist才可以
+     *
+     * 重写他的equals方法，才可以取出交集
+     * @return
+     */
+    public static List<Galleryclass> getDifferent(List<Galleryclass> prelist, List<Galleryclass> curlist) {
+        curlist.removeAll(prelist);
+        return curlist;
+    }
+
+
+    /**
+     * 判断是否安装微信
+     * @param context
+     * @return
+     */
+    public static boolean isWeixinAvilible(Context context) {
+        final PackageManager packageManager = context.getPackageManager();// 获取packagemanager
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);// 获取所有已安装程序的包信息
+        if (pinfo != null) {
+            for (int i = 0; i < pinfo.size(); i++) {
+                String pn = pinfo.get(i).packageName;
+                if (pn.equals("com.tencent.mm")) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+}

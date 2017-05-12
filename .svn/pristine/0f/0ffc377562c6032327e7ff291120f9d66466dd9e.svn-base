@@ -1,0 +1,68 @@
+package com.pulamsi.photomanager.base;
+
+import android.app.Application;
+import android.content.Context;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import com.litesuits.common.assist.Toastor;
+import com.pulamsi.photomanager.bean.User;
+import com.pulamsi.photomanager.bean.UserDao;
+import com.pulamsi.photomanager.dao.GreenDaoHelper;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
+
+
+/**
+ * User: Daidingkang(ddk19941017@Gmail.com)
+ * Date: 2016-11-10
+ * Time: 14:46
+ * FIXME
+ */
+public class MyApplication extends Application {
+
+    public static RequestQueue requestQueue;
+    public static Toastor toastor;
+    public static Context context;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        init();
+        initData();
+        initUmeng();
+        initState();
+    }
+
+    private void init() {
+        requestQueue = Volley.newRequestQueue(this);
+        toastor = new Toastor(this);
+        context = getApplicationContext();
+        GreenDaoHelper.initDatabase();
+    }
+
+    private void initData() {
+        UserDao userDao = GreenDaoHelper.getDaoSession().getUserDao();
+        User user = userDao.queryBuilder().unique();
+        if (user != null) {
+            Constants.MID = user.getMid();
+            Constants.IS_LOGIN = user.getIsLogin();
+            Constants.IMG_URL = user.getImgUrl();
+            Constants.NAME = user.getName();
+        }
+    }
+
+    private void initState() {
+//        PageStateLayout.Builder.setErrorView(R.layout.state_error);
+//        PageStateLayout.Builder.setEmptyView(R.layout.state_empty);
+    }
+
+    private void initUmeng() {
+        UMShareAPI.get(this);
+        PlatformConfig.setWeixin("wx521375ba1658f110", "9ec8e3dd6b6bb2a713e48101bacaa206");
+        PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad");
+        PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba");
+        PlatformConfig.setAlipay("2015111700822536");
+    }
+
+}

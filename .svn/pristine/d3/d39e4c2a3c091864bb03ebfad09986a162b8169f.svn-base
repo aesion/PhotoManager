@@ -1,0 +1,66 @@
+package com.pulamsi.photomanager.adapter;
+
+import android.app.Activity;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.pulamsi.photomanager.R;
+import com.pulamsi.photomanager.base.BaseListAdapter;
+import com.pulamsi.photomanager.bean.CommentsBean;
+import com.pulamsi.photomanager.viewHolder.CommentItemViewHolder;
+
+/**
+ * User: Daidingkang(ddk19941017@Gmail.com)
+ * Date: 2017-01-05
+ * Time: 14:04
+ * FIXME
+ */
+public class CommentApadter extends BaseListAdapter<CommentsBean> {
+
+    private View convertView;
+    private Activity activity;
+
+    public CommentApadter(Activity activity) {
+        super(activity);
+        this.activity = activity;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        convertView = mInflater.inflate(R.layout.comment_item, null);
+        if (convertView == null) {
+            return null;
+        }
+
+        return new CommentItemViewHolder(convertView);
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        if (viewHolder == null || !(viewHolder instanceof CommentItemViewHolder) || !(getItem(position) instanceof CommentsBean)) {
+            return;
+        }
+
+        CommentItemViewHolder holder = (CommentItemViewHolder) viewHolder;
+        CommentsBean commentsBean = getItem(position);
+
+
+        Glide.with(activity)//更改图片加载框架
+                .load(commentsBean.getImage()+".jpg")//这里拿的是微信的url
+                .centerCrop()
+//                .fitCenter()
+                .crossFade()
+//                .placeholder(R.mipmap.ic_default_avatar)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.img);
+
+        holder.name.setText(commentsBean.getName());
+        holder.time.setText(commentsBean.getComment_date());
+        holder.content.setText(commentsBean.getComment_content());
+
+
+    }
+}

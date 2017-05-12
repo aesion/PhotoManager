@@ -1,0 +1,308 @@
+package com.pulamsi.photomanager.view;
+
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Environment;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.TextView;
+
+import com.pulamsi.photomanager.R;
+import com.pulamsi.photomanager.base.CommonBaseActivity;
+import com.pulamsi.photomanager.base.Constants;
+import com.pulamsi.photomanager.base.MyApplication;
+import com.pulamsi.photomanager.bean.Galleryclass;
+import com.pulamsi.photomanager.bean.PasterLabel;
+import com.pulamsi.photomanager.interfaces.IUploadActivity;
+import com.pulamsi.photomanager.prestener.UploadActivityPrestener;
+import com.pulamsi.photomanager.widght.fitsystemwindowlayout.FlowLayout;
+import com.pulamsi.photomanager.widght.fitsystemwindowlayout.FlowRadioGroup;
+
+import org.ayo.view.status.StatusUIManager;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerActivity;
+import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerPreviewActivity;
+import cn.bingoogolapple.photopicker.widget.BGASortableNinePhotoLayout;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
+/**
+ * User: Daidingkang(ddk19941017@Gmail.com)
+ * Date: 2016-12-20
+ * Time: 11:44
+ * FIXME
+ */
+public class UploadActivity extends CommonBaseActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener, BGASortableNinePhotoLayout.Delegate,IUploadActivity {
+
+    FlowRadioGroup radioGroup;
+    LayoutInflater inflater;
+    FlowLayout flowLayout;
+    Button button;
+    BGASortableNinePhotoLayout mPhotosSnpl;
+    Button commit;
+    EditText etContent;
+
+    UploadActivityPrestener uploadActivityPrestener;
+    StatusUIManager statusUIManager;
+
+    private String classifiCation;
+    private String classifiCationId;
+    private StringBuilder sbTag;
+    private Map<String, String> tagMap;
+
+    private static final int REQUEST_CODE_PHOTO_PREVIEW = 2;
+    private static final int REQUEST_CODE_PERMISSION_PHOTO_PICKER = 1;
+    private static final int REQUEST_CODE_CHOOSE_PHOTO = 1;
+
+
+    @Override
+    protected void init() {
+        statusUIManager = new StatusUIManager(context, findViewById(R.id.view_content));
+
+        uploadActivityPrestener = new UploadActivityPrestener(this);
+        uploadActivityPrestener.requestData();
+
+        inflater = this.getLayoutInflater();
+        radioGroup = (FlowRadioGroup) findViewById(R.id.rg_radioGroup);
+        flowLayout = (FlowLayout) findViewById(R.id.hot_flowLayout);
+        commit = (Button) findViewById(R.id.bt_commit);
+        etContent = (EditText) findViewById(R.id.et_content);
+        mPhotosSnpl = (BGASortableNinePhotoLayout) findViewById(R.id.snpl_moment_add_photos);
+
+
+        button = (Button) findViewById(R.id.bt_add_tag);
+        button.setOnClickListener(this);
+        commit.setOnClickListener(this);
+
+        initTakePhoto();
+    }
+
+    private void initTakePhoto() {
+        // 设置拖拽排序控件的代理
+        mPhotosSnpl.setDelegate(this);
+    }
+
+
+    /**
+     * 初始化Tag
+     */
+    public void initHotTag(List<PasterLabel> pasterLabelList) {
+        sbTag = new StringBuilder();
+        tagMap = new HashMap<>();
+        List<String> list = new ArrayList();
+        for (PasterLabel pasterLabel : pasterLabelList) {
+            list.add(pasterLabel.getLabelName());
+        }
+
+        flowLayout.setMultiSelect(true);
+        flowLayout.setColorful(false);
+        flowLayout.setListData(list);
+        flowLayout.setOnTagClickListener(new FlowLayout.OnTagClickListener() {
+            @Override
+            public void TagClick(TextView tv, String text) {
+                if ((Boolean) tv.getTag()) {
+                    tagMap.put(text, text);
+                } else {
+                    tagMap.remove(text);
+                }
+            }
+        });
+    }
+
+
+    /**
+     * 初始化分类
+     */
+    @Override
+    public void initClassify(List<Galleryclass> galleryList) {
+        radioGroup.setListData(galleryList);
+        radioGroup.setOnRadioClickListener(new FlowRadioGroup.OnRadioClickListener() {
+            @Override
+            public void RadioClick(RadioButton button, boolean checked, String text) {
+                if (checked) {
+                    classifiCation = text;
+                    classifiCationId = (String) button.getTag();
+                }
+            }
+        });
+    }
+
+    @Override
+    protected int getContentViewID() {
+        return R.layout.activity_upload;
+    }
+
+    @Override
+    protected int getToolBarTitleID() {
+        return R.string.upload_title;
+    }
+
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked)
+            MyApplication.toastor.showToast(buttonView.getText().toString() + "" + buttonView.getTag().toString());
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bt_add_tag:
+
+                showAddTag();
+                break;
+            case R.id.bt_commit:
+                commit();
+                break;
+        }
+    }
+
+    private void showAddTag() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("添加标签");
+        View view = View.inflate(context,R.layout.dialog_add_tag,null);
+        final TextInputLayout inputLayout = (TextInputLayout) view.findViewById(R.id.til_tag);
+        builder.setView(view);
+        builder.setNegativeButton("取消", null);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (TextUtils.isEmpty(inputLayout.getEditText().getText())) {
+                    MyApplication.toastor.showToast("输入为空");
+                } else {
+                    flowLayout.addTag(inputLayout.getEditText().getText().toString());
+                    tagMap.put(inputLayout.getEditText().getText().toString(), inputLayout.getEditText().getText().toString());
+                }
+            }
+        });
+        builder.setCancelable(false);
+        builder.show();
+    }
+
+    private void commit() {
+
+        if (judge()) {
+            Map<String, String> maps = new HashMap<>();
+            if (!TextUtils.isEmpty(etContent.getText())){
+                maps.put("content",etContent.getText().toString());
+            }
+            maps.put("labels",sbTag.toString());
+            maps.put("pasterCatId",classifiCationId);
+            maps.put("title", sbTag.toString());
+            maps.put("memberId", Constants.MID);
+
+            uploadActivityPrestener.commit(mPhotosSnpl.getData(),maps);
+        }
+    }
+
+
+    /**
+     * 判断
+     *
+     * @return
+     */
+    private boolean judge() {
+        if (TextUtils.isEmpty(classifiCation)) {
+            MyApplication.toastor.showToast("请选择分类");
+            return false;
+        } else if (tagMap == null || tagMap.size() == 0) {
+            MyApplication.toastor.showToast("请选择标签");
+            return false;
+        }else if (mPhotosSnpl.getItemCount() == 0){
+            MyApplication.toastor.showToast("请至少选择一张图片");
+            return false;
+        }
+
+        sbTag.delete(0, sbTag.length());
+        for (Map.Entry<String, String> e : tagMap.entrySet()) {
+            sbTag.append(e.getValue() + ",");
+        }
+        sbTag.deleteCharAt(sbTag.length() - 1);
+        return true;
+    }
+
+
+    /**
+     * nine photo
+     */
+    @Override
+    public void onClickAddNinePhotoItem(BGASortableNinePhotoLayout sortableNinePhotoLayout, View view, int position, ArrayList<String> models) {
+        choicePhotoWrapper();
+    }
+
+    @Override
+    public void onClickDeleteNinePhotoItem(BGASortableNinePhotoLayout sortableNinePhotoLayout, View view, int position, String model, ArrayList<String> models) {
+        mPhotosSnpl.removeItem(position);
+    }
+
+    @Override
+    public void onClickNinePhotoItem(BGASortableNinePhotoLayout sortableNinePhotoLayout, View view, int position, String model, ArrayList<String> models) {
+        startActivityForResult(BGAPhotoPickerPreviewActivity.newIntent(this, mPhotosSnpl.getMaxItemCount(), models, models, position, false), REQUEST_CODE_PHOTO_PREVIEW);
+    }
+
+
+    @AfterPermissionGranted(REQUEST_CODE_PERMISSION_PHOTO_PICKER)
+    private void choicePhotoWrapper() {
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            // 拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话就没有拍照功能
+            File takePhotoDir = new File(Environment.getExternalStorageDirectory(), "BGAPhotoPickerTakePhoto");
+
+            startActivityForResult(BGAPhotoPickerActivity.newIntent(this, takePhotoDir, mPhotosSnpl.getMaxItemCount() - mPhotosSnpl.getItemCount(), null, false), REQUEST_CODE_CHOOSE_PHOTO);
+        } else {
+            EasyPermissions.requestPermissions(this, "图片选择需要以下权限:\n\n1.访问设备上的照片\n\n2.拍照", REQUEST_CODE_PERMISSION_PHOTO_PICKER, perms);
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CHOOSE_PHOTO) {
+            mPhotosSnpl.addMoreData(BGAPhotoPickerActivity.getSelectedImages(data));
+        } else if (requestCode == REQUEST_CODE_PHOTO_PREVIEW) {
+            mPhotosSnpl.setData(BGAPhotoPickerPreviewActivity.getSelectedImages(data));
+        }
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public void showLoading() {
+        statusUIManager.showLoading();
+    }
+
+    @Override
+    public void showEmpty() {
+        statusUIManager.showEmpty();
+    }
+
+    @Override
+    public void showError() {
+        statusUIManager.showError();
+    }
+
+    @Override
+    public void showContent() {
+        statusUIManager.showContentView();
+    }
+}

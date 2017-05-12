@@ -1,0 +1,164 @@
+package com.pulamsi.photomanager.prestener;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.litesuits.android.log.Log;
+import com.pulamsi.photomanager.base.Constants;
+import com.pulamsi.photomanager.base.MyApplication;
+import com.pulamsi.photomanager.bean.CommentsBean;
+import com.pulamsi.photomanager.bean.DefaultResult;
+import com.pulamsi.photomanager.bean.Gallery;
+import com.pulamsi.photomanager.helper.retrofit.RetrofitApi;
+import com.pulamsi.photomanager.interfaces.IImageDetailsActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+/**
+ * User: Daidingkang(ddk19941017@Gmail.com)
+ * Date: 2016-11-11
+ * Time: 15:04
+ * FIXME
+ */
+public class ImageDetailActivityPrestener extends BasePrestener {
+
+    private IImageDetailsActivity iImageDetailsActivity;
+
+    public ImageDetailActivityPrestener(IImageDetailsActivity iImageDetailsActivity) {
+        this.iImageDetailsActivity = iImageDetailsActivity;
+    }
+
+    public void requestData(String pid) {
+        iImageDetailsActivity.showLoading();
+        Map<String, String> map = new HashMap<>();
+        map.put("pid", pid);
+        if (Constants.IS_LOGIN)
+            map.put("mid", Constants.MID);
+
+        RetrofitApi.init().getImageDetailData(map).enqueue(new Callback<Gallery>() {
+            @Override
+            public void onResponse(Call<Gallery> call, Response<Gallery> response) {
+                if (response.code() == 200) {
+                    iImageDetailsActivity.showContent();
+                    iImageDetailsActivity.updateData(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Gallery> call, Throwable t) {
+                iImageDetailsActivity.showError();
+            }
+        });
+
+    }
+
+    /**
+     * 收藏
+     *
+     * @param map
+     */
+    public void collection(Map<String, String> map) {
+        RetrofitApi.init().collection(map).enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                iImageDetailsActivity.collectionToggle(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                MyApplication.toastor.showToast("收藏失败");
+            }
+        });
+    }
+
+
+
+    /**
+     * 评论列表
+     *
+     * @param pid
+     */
+
+    public void requestCommentList(String pid) {
+        Map<String, String> map = new HashMap<>();
+        map.put("pid", pid);
+        map.put("pageNumber", "1");
+        map.put("pageSize", "200");
+
+        RetrofitApi.init().commentList(map).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.e("",response.body());
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body());
+                    Gson gson = new Gson();
+                    List<CommentsBean> commentsBeans = gson.fromJson(jsonObject.get("list").toString(), new TypeToken<List<CommentsBean>>(){}.getType());
+
+                    iImageDetailsActivity.updateCommentData(commentsBeans);
+
+                } catch (JSONException e) {
+                    Log.e("","出错");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+//                MyApplication.toastor.showToast(t.toString());
+                Log.i(t.toString());
+            }
+        });
+    }
+
+
+
+    /**
+     * 点赞
+     *
+     * @param map
+     */
+    public void appreciate(Map<String, String> map) {
+
+        RetrofitApi.init().appreciate(map).enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                iImageDetailsActivity.appreciateToggle(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                MyApplication.toastor.showToast("点赞失败");
+            }
+        });
+    }
+
+
+
+    /**
+     * 提价评论
+     *
+     * @param map
+     */
+    public void submitComment(Map<String, String> map) {
+        RetrofitApi.init().submitComment(map).enqueue(new Callback<DefaultResult>() {
+            @Override
+            public void onResponse(Call<DefaultResult> call, Response<DefaultResult> response) {
+                iImageDetailsActivity.submitCommentBack(response.body().getSuccessful());
+            }
+
+            @Override
+            public void onFailure(Call<DefaultResult> call, Throwable t) {
+                MyApplication.toastor.showToast("评论失败");
+                iImageDetailsActivity.submitCommentBack(false);
+            }
+        });
+    }
+}

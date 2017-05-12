@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/view_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="8dp"
+                >
+
+                <include layout="@layout/upload_classify">
+                </include>
+
+                <include layout="@layout/upload_hottag">
+                </include>
+
+                <include layout="@layout/upload_toggle">
+                </include>
+
+                <include layout="@layout/upload_title">
+                </include>
+
+                <include layout="@layout/upload_content">
+                </include>
+
+                <include layout="@layout/post_type_toggle">
+                </include>
+
+                <include
+                    layout="@layout/upload_photo">
+                </include>
+
+                <include
+                    layout="@layout/upload_video">
+                </include>
+
+
+            </LinearLayout>
+            <FrameLayout
+                android:id="@+id/fl_commit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:layout_marginTop="15dp"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:text="上传素材"
+                    android:background="?attr/colorPrimary"
+                    android:textColor="@color/white"
+                    />
+            </FrameLayout>
+        </LinearLayout>
+
+    </ScrollView>
+</FrameLayout>

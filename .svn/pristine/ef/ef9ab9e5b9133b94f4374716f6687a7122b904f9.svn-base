@@ -1,0 +1,75 @@
+package com.pulamsi.photomanager.utils;
+
+import android.app.Activity;
+import android.graphics.Bitmap;
+
+import com.pulamsi.photomanager.base.MyApplication;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+
+/**
+ * User: Daidingkang(ddk19941017@Gmail.com)
+ * Date: 2016-11-29
+ * Time: 13:53
+ * FIXME
+ */
+public class ShareUtils {
+
+    private static ShareUtils instance;
+    private ShareAction shareAction;
+
+    public static ShareUtils getInstance() {
+        if (instance == null) {
+            instance = new ShareUtils();
+        }
+        return instance;
+    }
+
+    private void SnackbarUtil() {
+
+    }
+
+    public void shareString(Activity activity,String text) {
+        shareAction = new ShareAction(activity);
+        shareAction.setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.WEIXIN_FAVORITE, SHARE_MEDIA.MORE)
+                .withText(text)
+                .setCallback(umShareListener)
+                .open();
+    }
+
+    public void shareImage(Activity activity,Bitmap bitmap) {
+        UMImage image = new UMImage(activity, bitmap);//bitmap文件
+        shareAction = new ShareAction(activity);
+        shareAction.setDisplayList(SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.WEIXIN_FAVORITE, SHARE_MEDIA.MORE)
+                .withMedia(image)
+                .setCallback(umShareListener)
+                .open();
+    }
+
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            if (platform.name().equals("WEIXIN_FAVORITE")) {
+                MyApplication.toastor.showToast("收藏成功");
+
+            } else {
+                MyApplication.toastor.showToast("分享成功");
+            }
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            MyApplication.toastor.showToast("分享失败");
+
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            MyApplication.toastor.showToast("用户取消");
+        }
+    };
+
+}

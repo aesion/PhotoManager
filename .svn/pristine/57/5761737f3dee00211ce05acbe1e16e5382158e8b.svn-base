@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/rl_header"
+                android:layout_width="match_parent"
+                android:layout_height="182dp"
+                android:padding="16dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/nav_header_img"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@mipmap/ic_login_avatar"
+            android:layout_gravity="center_horizontal"
+            app:civ_border_color="@android:color/white"
+            app:civ_border_width="2dp"
+            />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="普兰氏"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="15sp"/>
+
+        <!-- 登录|注册按钮，与登录信息面板互斥-->
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tv_login"
+            android:layout_width="80dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/selector_btn_stroke_white_1px_solid_app_hai_main_color_deep_corner_2px"
+            android:gravity="center"
+            android:text="登录"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
+
+</RelativeLayout>

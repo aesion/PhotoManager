@@ -1,0 +1,120 @@
+package com.pulamsi.photomanager.utils;
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
+import android.util.TypedValue;
+import android.widget.RelativeLayout;
+
+import com.pulamsi.photomanager.R;
+import com.pulamsi.photomanager.base.MyApplication;
+import com.pulamsi.photomanager.utils.themes.BaseTheme;
+import com.pulamsi.photomanager.utils.themes.ThemeDoge;
+import com.pulamsi.photomanager.utils.themes.ThemeKumamon;
+import com.pulamsi.photomanager.utils.themes.ThemeLight;
+import com.pulamsi.photomanager.utils.themes.Themes;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+public class ThemeUtils {
+
+    private static Map<Integer, BaseTheme> themeMap = new HashMap<>();
+
+    static {
+        themeMap.put(Themes.THEME_LIGHT, new ThemeLight());
+        themeMap.put(Themes.THEME_DOGE, new ThemeDoge());
+        themeMap.put(Themes.THEME_KUMAMON, new ThemeKumamon());
+
+    }
+
+    private static int getThemeType() {
+        return SharedPreferencesHelper.getInstance().getThemeType(MyApplication.context);
+    }
+
+    public static void onActivityCreateSetTheme(Activity activity) {
+        int themeType = getThemeType();
+        BaseTheme baseTheme = themeMap.get(themeType);
+        int activityTheme = baseTheme.getActivityTheme();
+        activity.setTheme(activityTheme);//切换主题的重点
+    }
+
+    public static int getThemeColorRes(String themeValueName) {
+        int themeValue = StringUtils.parseInt(themeValueName);
+        int colorRes = -1;
+        switch (themeValue) {
+            case Themes.THEME_LIGHT:
+                colorRes = R.color.colorPrimary_light;
+                break;
+            case Themes.THEME_DOGE:
+                colorRes = R.color.colorPrimary_doge;
+                break;
+            case Themes.THEME_KUMAMON:
+                colorRes = R.color.colorPrimary_kumamon;
+                break;
+        }
+        return colorRes;
+    }
+
+
+    public static int getThemeColorRes(Context context) {
+        int themeValue =getThemeType();
+        int colorRes = -1;
+        switch (themeValue) {
+            case Themes.THEME_LIGHT:
+                colorRes =context.getResources().getColor(R.color.colorPrimary_light);
+                break;
+            case Themes.THEME_DOGE:
+                colorRes =context.getResources().getColor(R.color.colorPrimary_doge);
+                break;
+            case Themes.THEME_KUMAMON:
+                colorRes =context.getResources().getColor(R.color.colorPrimary_kumamon);
+                break;
+        }
+        return colorRes;
+    }
+
+    public static int getColorPrimaryColor(Context context) {
+        TypedValue value = new TypedValue();
+        context.getTheme().resolveAttribute(R.attr.colorPrimary, value, true);
+        return value.data;
+    }
+
+    public static void setThemeImage(Context context, RelativeLayout view){
+        switch (getThemeType()) {
+            case Themes.THEME_LIGHT:
+                view.setBackgroundColor(getThemeColorRes(context));
+                break;
+            case Themes.THEME_DOGE:
+                view.setBackgroundResource(R.mipmap.themes_doge_pic);
+                break;
+            case Themes.THEME_KUMAMON:
+                view.setBackgroundResource(R.mipmap.themes_kumamon_pic);
+                break;
+        }
+    }
+    public static int GetRandomColor() {
+        Random random = new Random();
+        int p = random.nextInt(Colors.length);
+        return Color.parseColor(Colors[p]);
+    }
+    private static String[] Colors = {
+            "#F44336",
+            "#E91E63",
+            "#9C27B0",
+            "#2196F3",
+            "#03A9F4",
+            "#00BCD4",
+            "#009688",
+            "#4CAF50",
+            "#8BC34A",
+            "#CDDC39",
+            "#FFEB3B",
+            "#FFC107",
+            "#FF9800",
+            "#FF5722",
+            "#795548",
+            "#9E9E9E",
+            "#607D8B"};
+}

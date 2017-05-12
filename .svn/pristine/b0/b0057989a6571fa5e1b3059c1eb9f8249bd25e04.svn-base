@@ -1,0 +1,81 @@
+package com.pulamsi.photomanager.view;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.github.jdsjlzx.recyclerview.LRecyclerView;
+import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
+import com.pulamsi.photomanager.R;
+import com.pulamsi.photomanager.adapter.HomeListAdapter;
+import com.pulamsi.photomanager.helper.BannerImageLoader;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+
+import java.util.Arrays;
+
+/**
+ * User: Daidingkang(ddk19941017@Gmail.com)
+ * Date: 2016-12-05
+ * Time: 14:00
+ * FIXME
+ */
+public class HotFragment extends Fragment {
+
+    LRecyclerView lRecyclerView;
+    LRecyclerViewAdapter mLRecyclerViewAdapter;
+
+    View view;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (view == null)
+        view = inflater.inflate(R.layout.list_content_fragment, null);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        lRecyclerView = (LRecyclerView) view.findViewById(R.id.list);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+
+        lRecyclerView.setLayoutManager(layoutManager);
+
+        HomeListAdapter mHomeListAdapter = new HomeListAdapter(this.getActivity());
+
+        mLRecyclerViewAdapter = new LRecyclerViewAdapter(mHomeListAdapter);
+        lRecyclerView.setAdapter(mLRecyclerViewAdapter);
+
+        initBaner();//初始化轮播图
+
+
+    }
+
+    private void initBaner() {
+        View header = LayoutInflater.from(getActivity()).inflate(R.layout.home_banner,(ViewGroup)view.findViewById(android.R.id.content), false);
+        Banner banner = (Banner) header.findViewById(R.id.banner);
+        //设置图片加载器
+        banner.setImageLoader(new BannerImageLoader());
+        banner.setIndicatorGravity(BannerConfig.RIGHT);
+        //设置轮播时间
+        banner.setDelayTime(4000);
+        //设置图片集合
+        String[] array = getResources().getStringArray(R.array.url4);
+        banner.setImages(Arrays.asList(array));
+        //banner设置方法全部调用完毕时最后调用
+        banner.start();
+
+        mLRecyclerViewAdapter.addHeaderView(header);
+    }
+
+}

@@ -1,0 +1,25 @@
+package com.pulamsi.photomanager.utils;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+/**
+ * User: Daidingkang(ddk19941017@Gmail.com)
+ * Date: 2017-01-06
+ * Time: 12:03
+ * FIXME
+ */
+public class DataUtils {
+
+    /*
+    * 将时间戳转换为时间
+    */
+    public static String stampToDate(String s){
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long lt = new Long(s);
+        Date date = new Date(lt);
+        res = simpleDateFormat.format(date);
+        return res;
+    }
+}

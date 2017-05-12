@@ -1,0 +1,470 @@
+package com.pulamsi.photomanager.view;
+
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Handler;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.litesuits.android.log.Log;
+import com.pulamsi.photomanager.R;
+import com.pulamsi.photomanager.adapter.CommentApadter;
+import com.pulamsi.photomanager.base.AppBus;
+import com.pulamsi.photomanager.base.CommonBaseActivity;
+import com.pulamsi.photomanager.base.Constants;
+import com.pulamsi.photomanager.base.MyApplication;
+import com.pulamsi.photomanager.bean.CommentsBean;
+import com.pulamsi.photomanager.bean.DataChangedEvent;
+import com.pulamsi.photomanager.bean.Gallery;
+import com.pulamsi.photomanager.interfaces.IImageDetailsActivity;
+import com.pulamsi.photomanager.prestener.ImageDetailActivityPrestener;
+import com.pulamsi.photomanager.utils.DataUtils;
+import com.pulamsi.photomanager.utils.DeleteUtils;
+import com.pulamsi.photomanager.utils.ImageUtil;
+import com.pulamsi.photomanager.utils.InputSoftUtils;
+import com.pulamsi.photomanager.utils.JudgeUtils;
+import com.pulamsi.photomanager.utils.OtherUtils;
+import com.pulamsi.photomanager.utils.SnackbarUtil;
+import com.pulamsi.photomanager.widght.fitsystemwindowlayout.CollectionBottomDialog;
+import com.pulamsi.photomanager.widght.fitsystemwindowlayout.FlowLayout;
+import com.pulamsi.photomanager.widght.fitsystemwindowlayout.ImageViewAppreciate;
+import com.pulamsi.photomanager.widght.fitsystemwindowlayout.ImageViewLike;
+import com.squareup.otto.Subscribe;
+import com.trycatch.mysnackbar.Prompt;
+
+import org.ayo.view.status.DefaultStatusProvider;
+import org.ayo.view.status.StatusUIManager;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout;
+
+/**
+ * User: Daidingkang(ddk19941017@Gmail.com)
+ * Date: 2017-01-03
+ * Time: 14:47
+ * FIXME
+ */
+public class ImageDetailsActivity extends CommonBaseActivity implements BGANinePhotoLayout.Delegate, IImageDetailsActivity, DefaultStatusProvider.DefaultErrorStatusView.OnRetryClickListener, View.OnClickListener, TextView.OnEditorActionListener {
+
+    private static final long TIME_DELAY = 10000;
+    private String pid;
+    private StatusUIManager statusUIManager;
+    private StatusUIManager listUIManager;
+    private FlowLayout hisFlowLayout;
+    private ImageDetailActivityPrestener imageDetailActivityPrestener;
+    private ArrayList<String> imgs;
+    private ImageViewLike imageViewLike;
+    private ImageViewAppreciate imageViewAppreciate;
+    private Gallery gallery;
+    private RecyclerView commentList;
+    private CommentApadter commentApadter;
+    private ImageView share;
+    private TextView content, time, like, appreciate, comment;
+    private EditText submitComment;
+    private MaterialDialog dialog;
+    private int shareNum;
+
+
+    @Override
+    protected void init() {
+        pid = getIntent().getStringExtra("pid");
+        statusUIManager = new StatusUIManager(context, findViewById(R.id.view_content));
+        listUIManager = new StatusUIManager(context, findViewById(R.id.rv_comment_list));
+        hisFlowLayout = (FlowLayout) findViewById(R.id.tag_flowLayout);
+        imageViewLike = (ImageViewLike) findViewById(R.id.ivl_like);
+        share = (ImageView) findViewById(R.id.iv_share);
+        content = (TextView) findViewById(R.id.tv_content);
+        time = (TextView) findViewById(R.id.tv_time);
+        like = (TextView) findViewById(R.id.tv_like);
+        comment = (TextView) findViewById(R.id.tv_comment);
+        submitComment = (EditText) findViewById(R.id.et_comment);
+        submitComment.setOnEditorActionListener(this);
+        appreciate = (TextView) findViewById(R.id.tv_appreciate);
+        imageViewAppreciate = (ImageViewAppreciate) findViewById(R.id.ivl_appreciate);
+        commentList = (RecyclerView) findViewById(R.id.rv_comment_list);
+        commentList.setLayoutManager(new LinearLayoutManager(context));
+        commentList.setHasFixedSize(true);
+        commentApadter = new CommentApadter(ImageDetailsActivity.this);
+        commentList.setAdapter(commentApadter);
+
+
+        imageViewLike.setOnClickListener(this);
+        imageViewAppreciate.setOnClickListener(this);
+        share.setOnClickListener(this);
+        imageDetailActivityPrestener = new ImageDetailActivityPrestener(this);
+        statusUIManager.setOnRetryClickListener(this);
+        imageDetailActivityPrestener.requestData(pid);
+        imageDetailActivityPrestener.requestCommentList(pid);
+    }
+
+    @Override
+    protected int getContentViewID() {
+        return R.layout.activity_image_detail;
+    }
+
+    @Override
+    protected int getToolBarTitleID() {
+        return R.string.image_details;
+    }
+
+    @Override
+    public void onClickNinePhotoItem(BGANinePhotoLayout bgaNinePhotoLayout, View view, int i, String s, List<String> list) {
+        Intent intent = new Intent(ImageDetailsActivity.this, PhotoViewerActivity.class);
+        intent.putStringArrayListExtra("imgs", imgs);
+        intent.putExtra("position", i);
+        context.startActivity(intent);
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public void showLoading() {
+        statusUIManager.showLoading();
+    }
+
+    @Override
+    public void showEmpty() {
+        statusUIManager.showEmpty();
+    }
+
+    @Override
+    public void showError() {
+        statusUIManager.showError();
+    }
+
+    @Override
+    public void showContent() {
+        statusUIManager.showContentView();
+    }
+
+    /**
+     * 重新加载
+     */
+    @Override
+    public void onClick() {
+        imageDetailActivityPrestener.requestData(pid);
+    }
+
+
+    /**
+     * 更新数据
+     *
+     * @param gallery
+     */
+    @Override
+    public void updateData(Gallery gallery) {
+        Log.i(gallery.toString());
+        this.gallery = gallery;
+        imgs = new ArrayList<>();
+        for (Map.Entry<String, String> e : gallery.getPasterImages().entrySet()) {
+            imgs.add(getString(R.string.serverbaseurl) + e.getValue());
+        }
+        BGANinePhotoLayout bgaNinePhotoLayout = (BGANinePhotoLayout) findViewById(R.id.npl_item_moment_photos);
+        bgaNinePhotoLayout.setDelegate(this);
+        bgaNinePhotoLayout.setData(imgs);
+
+        content.setText(gallery.getContent() + "");
+        time.setText(DataUtils.stampToDate(gallery.getReleaseTime() + ""));
+        like.setText(gallery.getCollectCount() + "");
+        appreciate.setText(gallery.getThumbs_upCount() + "");
+        comment.setText(gallery.getCommentCount() + "");
+        imageViewAppreciate.setIsChenked(gallery.isGoods());
+        imageViewLike.setIsChenked(gallery.isCollection());
+        toolbar.setTitle(gallery.getTitle());
+
+        hisFlowLayout.setListData(gallery.getLabels());
+        hisFlowLayout.setOnTagClickListener(new FlowLayout.OnTagClickListener() {
+            @Override
+            public void TagClick(TextView tv, String text) {
+                readyGo("#" + text + "#");//标签必须加上
+            }
+        });
+    }
+
+    /**
+     * 跳转搜索
+     *
+     * @param query
+     */
+    private void readyGo(String query) {
+        Intent intent = new Intent(ImageDetailsActivity.this, SearchListActivity.class);
+        intent.putExtra("search", query);
+        readyGoAndIntent(intent);
+    }
+
+    /**
+     * 收藏切换
+     *
+     * @param body
+     */
+    @Override
+    public void collectionToggle(Boolean body) {
+        if (body) {
+            imageViewLike.toggle();
+            if (imageViewLike.getIsChenked()) {
+                like.setText(Integer.parseInt(like.getText().toString()) + 1 + "");
+                SnackbarUtil.showPrompt(getWindow().getDecorView(), "收藏成功", Prompt.SUCCESS);
+            } else {
+                like.setText(Integer.parseInt(like.getText().toString()) - 1 + "");
+                SnackbarUtil.showPrompt(getWindow().getDecorView(), "取消收藏", Prompt.WARNING);
+            }
+        } else {
+            MyApplication.toastor.showToast("操作失败");
+        }
+    }
+
+
+    /**
+     * 添加到收藏夹
+     *
+     * @param ptid
+     */
+    public void addCollection(String ptid) {
+        Map<String, String> map = new HashMap<>();
+        map.put("pid", gallery.getId());
+        map.put("mid", Constants.MID);
+        map.put("cid", gallery.getPasterCatId());
+        map.put("ptid", ptid);
+        imageDetailActivityPrestener.collection(map);
+    }
+
+
+    /**
+     * 点赞切换
+     *
+     * @param body
+     */
+    @Override
+    public void appreciateToggle(Boolean body) {
+        if (body) {
+            imageViewAppreciate.toggle();
+            if (imageViewAppreciate.getIsChenked()) {
+                appreciate.setText(Integer.parseInt(appreciate.getText().toString()) + 1 + "");
+            } else {
+                appreciate.setText(Integer.parseInt(appreciate.getText().toString()) - 1 + "");
+            }
+        } else {
+            MyApplication.toastor.showToast("点赞失败");
+        }
+    }
+
+
+    /**
+     * 评论的回调
+     *
+     * @param successful
+     */
+    @Override
+    public void submitCommentBack(Boolean successful) {
+        if (successful) {
+            SnackbarUtil.showLoadSuccess("评论成功");
+            imageDetailActivityPrestener.requestCommentList(pid);
+            comment.setText(Integer.parseInt(comment.getText().toString()) + 1 + "");
+        } else {
+            SnackbarUtil.showLoadError("评论失败");
+        }
+    }
+
+
+    /**
+     * 更新评论列表
+     *
+     * @param body
+     */
+    @Override
+    public void updateCommentData(List<CommentsBean> body) {
+        if (body == null || body.size() == 0) {
+            listUIManager.showEmpty();
+        } else {
+            listUIManager.showContentView();
+            commentApadter.clearDataList();
+            commentApadter.addDataList(body);
+            commentApadter.notifyDataSetChanged();
+        }
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ivl_like://收藏
+                if (JudgeUtils.isLogin(ImageDetailsActivity.this)) {
+                    if (!imageViewLike.getIsChenked()) {
+                        CollectionBottomDialog dialog = new CollectionBottomDialog();
+                        dialog.setOnClickAddCollectionListener(new CollectionBottomDialog.OnClickAddCollectionListener() {
+                            @Override
+                            public void OnClickAddCollection(String ptid) {
+                                addCollection(ptid);
+                            }
+                        });
+                        dialog.show(getSupportFragmentManager());
+                    } else {
+                        Map<String, String> map = new HashMap<>();
+                        map.put("pid", gallery.getId());
+                        map.put("mid", Constants.MID);
+                        map.put("cid", gallery.getPasterCatId());
+                        //取消收藏没有传收藏夹ID
+                        imageDetailActivityPrestener.collection(map);
+                    }
+                }
+                break;
+            case R.id.ivl_appreciate:
+                if (JudgeUtils.isLogin(ImageDetailsActivity.this)) {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("pid", gallery.getId());
+                    map.put("mid", Constants.MID);
+                    imageDetailActivityPrestener.appreciate(map);//点赞或取消赞
+                }
+
+                break;
+            case R.id.iv_share:
+                if (!OtherUtils.isWeixinAvilible(getContext())) {
+                    SnackbarUtil.showPrompt(getWindow().getDecorView(), "没有安装微信！", Prompt.ERROR);
+                    return;
+                }
+                shareNum = 0;
+                dialog = new MaterialDialog.Builder(this)
+                        .title("正在准备分享的图片")
+                        .progress(false, imgs.size(), true)
+                        .cancelable(false)
+                        .show();
+
+                DeleteUtils.DeleteFolder(ImageUtil.SHARE_IMGDIR);//删除旧文件资源
+                //超时的处理
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!dialog.isCancelled()) {
+                            MyApplication.toastor.showLongToast("请求超时，请检查图片是否异常！");
+                            dialog.dismiss();
+                        }
+                    }
+                }, TIME_DELAY);
+
+                //循环下载保存图片
+//                SnackbarUtil.showPrompt(getWindow().getDecorView(),"分享",Prompt.SUCCESS);
+                for (int i = 0; i < imgs.size(); i++) {
+                    final int position;
+                    position = i;
+                    Glide.with(context)
+                            .load(imgs.get(i))
+                            .asBitmap()
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                            .into(new SimpleTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                                    ImageUtil.saveImage(context, resource, getWindow().getDecorView(), true, position);
+                                }
+                            });
+                }
+                break;
+        }
+    }
+
+    @Subscribe   //订阅事件DataChangedEvent
+    public void SubscribeShareFile(DataChangedEvent imageFile) {
+        if (dialog.getCurrentProgress() != dialog.getMaxProgress()) {
+            dialog.incrementProgress(1);
+        }
+        shareNum++;
+        Log.i(shareNum + "---" + imgs.size());
+        if (imgs.size() == shareNum) {
+            Log.i("发送");
+            dialog.setContent("准备完成");
+            File[] arr = new File[imgs.size()];
+            for (int i = 0; i < imgs.size(); i++) {
+                arr[i] = new File(ImageUtil.SHARE_IMGDIR, i + ".jpg");
+            }
+            shareMultiplePictureToTimeLine(arr);
+            dialog.dismiss();
+        } else {
+            Log.i("保存");
+        }
+    }
+
+
+    private void shareMultiplePictureToTimeLine(File[] files) {
+        Intent intent = new Intent();
+        ComponentName comp = new ComponentName("com.tencent.mm",
+                "com.tencent.mm.ui.tools.ShareToTimeLineUI");
+        intent.setComponent(comp);
+        intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+        intent.setType("image/*");
+        ArrayList<Uri> imageUris = new ArrayList<Uri>();
+        for (File f : files) {
+            imageUris.add(Uri.fromFile(f));
+        }
+        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+        intent.putExtra("Kdescription", gallery.getContent());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //注册到bus事件总线中
+        AppBus.getInstance().register(this);
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //注销到bus事件
+        AppBus.getInstance().unregister(this);
+    }
+
+
+    /**
+     * 提交评论
+     *
+     * @param v
+     * @param actionId
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_SEND) {
+            InputSoftUtils.hideSoftKeyboard(submitComment, context);//隐藏软键盘
+            if (TextUtils.isEmpty(v.getText())) {
+
+            } else {
+                if (JudgeUtils.isLogin(ImageDetailsActivity.this)) {
+                    SnackbarUtil.showLoading(getWindow().getDecorView(), "提交中...");
+                    Map<String, String> map = new HashMap<>();
+                    map.put("pid", gallery.getId());
+                    map.put("mid", Constants.MID);
+                    map.put("content", v.getText().toString());
+                    imageDetailActivityPrestener.submitComment(map);
+                    submitComment.getText().clear();
+                }
+            }
+        }
+        return false;
+    }
+}

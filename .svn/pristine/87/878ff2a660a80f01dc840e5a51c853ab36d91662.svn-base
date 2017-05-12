@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">PhotoManager</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="change_title">主题切换</string>
+    <string name="about_title">关于</string>
+    <string name="fav_title">我的收藏</string>
+    <string name="fav_download">下载中心</string>
+    <string name="setting_title">设置</string>
+    <string name="feedback_title">意见反馈</string>
+    <string name="image_details">加载中...</string>
+    <string name="create_folder_title">创建收藏夹</string>
+    <string name="collection_details_title">加载中...</string>
+    <string name="mine_info">我的</string>
+    <string name="copyright_info">广州普兰氏信息科技有限公司\nCopyright © 2016, Pulamsi.com All rights reserved</string>
+    <string name="aboutContent">本软件致力于解决微商朋友圈遇到的种种问题。\n从16年11月上线，到目前经历两次重大改版，一次代码的重构，一次界面的大幅度改动，目的都是为了你们。
+    在开源的过程中，收到了很多来自有趣的你们的邮件。\n我也曾遇到过棘手的问题无处咨询又谷歌不到。那个时候的我，也可能是现在的你。所以我希望能够帮助到你。</string>
+    <string name="upload_title">上传素材</string>
+</resources>

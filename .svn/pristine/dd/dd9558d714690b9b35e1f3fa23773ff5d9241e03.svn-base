@@ -1,0 +1,28 @@
+package com.pulamsi.photomanager.bean;
+
+/**
+ * User: Daidingkang(ddk19941017@Gmail.com)
+ * Date: 2017-01-09
+ * Time: 16:47
+ * FIXME
+ */
+public class MineCount {
+    private int pasterCount;// 个人发布数
+    private int collectionCount;// 个人收藏数
+
+    public int getPasterCount() {
+        return pasterCount;
+    }
+
+    public void setPasterCount(int pasterCount) {
+        this.pasterCount = pasterCount;
+    }
+
+    public int getCollectionCount() {
+        return collectionCount;
+    }
+
+    public void setCollectionCount(int collectionCount) {
+        this.collectionCount = collectionCount;
+    }
+}

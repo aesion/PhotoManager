@@ -1,0 +1,35 @@
+package com.pulamsi.photomanager.utils;
+
+import android.content.Context;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+
+/**
+ * User: Daidingkang(ddk19941017@Gmail.com)
+ * Date: 2017-01-03
+ * Time: 12:13
+ * FIXME
+ */
+public class DialogUtils {
+
+    static MaterialDialog.Builder builder;
+    static MaterialDialog dialog;
+
+    public static void showLoading(String text,Context context) {
+        if (builder == null){
+            builder = new MaterialDialog.Builder(context);
+        }
+        builder.content(text)
+                .progress(true, 0)
+                .cancelable(false);
+        dialog = builder.build();
+        dialog.show();
+    }
+
+    public static void hideLoading() {
+        if (dialog != null){
+            dialog.dismiss();
+        }
+    }
+
+}

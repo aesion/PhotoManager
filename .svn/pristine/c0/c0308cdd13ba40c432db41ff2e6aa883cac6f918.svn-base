@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!--Base Color-->
+    <color name="app_Primary">#FF99CC</color>
+    <color name="app_PrimaryDark">#FFCCCC</color>
+    <color name="app_Accent">#CCCCFF</color>
+    <color name="window_background">#FFF5F5F5</color>
+
+    <color name="black_alpha_100">#041835</color>
+    <color name="black_alpha_90">#e6041835</color>
+    <color name="black_alpha_54">#8a041835</color>
+    <color name="black_alpha_36">#5c041835</color>
+    <color name="black_alpha_18">#2e041835</color>
+    <color name="black_alpha_10">#19041835</color>
+    <color name="black_alpha_6">#0f041835</color>
+
+
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="white_alpha_100">#ffffffff</color>
+    <color name="white_alpha_95">#f2ffffff</color>
+    <color name="white_alpha_71">#b5ffffff</color>
+    <color name="white_alpha_61">#9bffffff</color>
+    <color name="white_alpha_54">#8affffff</color>
+    <color name="white_alpha_41">#68ffffff</color>
+    <color name="white_alpha_40">#66ffffff</color>
+    <color name="white_alpha_36">#5bffffff</color>
+    <color name="white_alpha_35">#59ffffff</color>
+    <color name="white_alpha_31">#4fffffff</color>
+    <color name="white_alpha_23">#3affffff</color>
+    <color name="white_alpha_21">#35ffffff</color>
+    <color name="white_alpha_18">#2effffff</color>
+    <color name="white_alpha_12">#1fffffff</color>
+    <color name="white_alpha_6">#0fffffff</color>
+    <color name="black_no_alpha_36">#a4acb6</color>
+    <color name="black_no_alpha_10">#e5e5e5</color>
+    <color name="line_cc">#cccccc</color>
+
+    <color name="defaultTextColor">#6f6f6f</color>
+
+
+    <!--Light Theme-->
+    <color name="colorPrimary_light">#f56a66</color>
+    <color name="primary_light_50">#80f56a66</color>
+    <color name="primary_light_10">#1Af56a66</color>
+    <color name="colorPrimaryDark_light">#f85450</color>
+    <color name="colorPrimaryDarkInverse_light">#cccccc</color>
+    <color name="colorPrimaryTint_light">@color/primary_light_10</color>
+    <color name="colorAccent_light">@color/colorPrimary_light</color>
+    <color name="foreground_color_light">#ffffffff</color>
+    <color name="background_color_light">#f0f1f3</color>
+    <color name="iconColorPrimary_light">#788291</color>
+    <color name="iconColorPrimaryInverse_light">@color/white_alpha_100</color>
+    <color name="iconColorSecondary_light">@color/black_no_alpha_36</color>
+    <color name="iconColorTertiary_light">#e6e8eb</color>
+    <color name="textColorPrimary_light">@color/black_alpha_90</color>
+    <color name="textColorSecondary_light">@color/black_alpha_54</color>
+    <color name="textColorPrimaryInverse_light">@color/white_alpha_100</color>
+    <color name="textColorSecondaryInverse_light">@color/white_alpha_54</color>
+    <color name="textColorTertiary_light">@color/black_alpha_36</color>
+    <color name="textColorTertiaryInverse_light">@color/white_alpha_36</color>
+    <color name="textColorPrimaryTint_light">@color/black_alpha_18</color>
+    <color name="textColorPrimaryTintInverse_light">@color/white_alpha_36</color>
+    <color name="textColorPrimaryDisable_light">@color/black_alpha_18</color>
+    <color name="divider_color_light">#f0f1f3</color>
+    <color name="dividerSecondary_color_light">#f7f8f9</color>
+    <color name="textColorLink_light">@color/colorPrimary_light</color>
+    <color name="gap_color_light">@color/black_alpha_6</color>
+    <color name="shadowColorPrimary_light">#0b1f5d6c</color>
+    <color name="item_selected_color_light">#1A349ab1</color>
+    <color name="item_selected_deep_color_light">@color/primary_light_50</color>
+    <color name="text_color_dark_light">@color/colorWhite</color>
+
+    <!--Doge Theme-->
+    <color name="primary_doge_100">#dec88e</color>
+    <color name="primary_doge_50">#80dec88e</color>
+    <color name="primary_doge_10">#1Adec88e</color>
+
+    <color name="text_color_dark_doge">#8e6635</color>
+
+    <color name="colorPrimary_doge">@color/primary_doge_100</color>
+    <color name="colorPrimaryDark_doge">#d3b66b</color>
+    <color name="colorAccent_doge">@color/primary_doge_100</color>
+
+    <color name="textColorLink_doge">@color/primary_doge_100</color>
+    <color name="item_selected_color_doge">@color/primary_doge_10</color>
+    <color name="item_selected_deep_color_doge">@color/primary_doge_50</color>
+
+    <!--Kumamon Theme-->
+    <color name="primary_kumamon_100">#7ec4d9</color>
+    <color name="primary_kumamon_50">#807ec4d9</color>
+    <color name="primary_kumamon_10">#1A7ec4d9</color>
+
+    <color name="text_color_dark_kumamon">#3484ad</color>
+
+    <color name="colorPrimary_kumamon">@color/primary_kumamon_100</color>
+    <color name="colorPrimaryDark_kumamon">#6bb4ca</color>
+    <color name="colorAccent_kumamon">@color/primary_kumamon_100</color>
+
+    <color name="textColorLink_kumamon">@color/primary_kumamon_100</color>
+    <color name="item_selected_color_kumamon">@color/primary_kumamon_10</color>
+    <color name="item_selected_deep_color_kumamon">@color/primary_kumamon_50</color>
+</resources>

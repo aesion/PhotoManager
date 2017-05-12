@@ -1,0 +1,127 @@
+package com.pulamsi.photomanager.view;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.pulamsi.photomanager.R;
+import com.pulamsi.photomanager.adapter.FragmentAdapter;
+import com.pulamsi.photomanager.bean.Galleryclass;
+import com.pulamsi.photomanager.interfaces.IMainactivity;
+import com.pulamsi.photomanager.prestener.MainActivityPrestener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * User: Daidingkang(ddk19941017@Gmail.com)
+ * Date: 2016-12-13
+ * Time: 15:50
+ * FIXME
+ */
+public class HomePhotoFragment extends Fragment implements IMainactivity {
+    ViewPager mViewPager;
+    TabLayout mTabLayout;
+    MainActivityPrestener pMainActivity;
+    List<String> titles;
+    FragmentAdapter adapter;
+    ImageView addClassify;
+
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.home_fragment, null);
+        return root;
+    }
+
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mTabLayout = (TabLayout) getActivity().findViewById(R.id.tabLayout);//拿到Activity的mTabLayout
+        mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        addClassify = (ImageView) getActivity().findViewById(R.id.iv_add_classify);
+        pMainActivity = new MainActivityPrestener(this);
+        pMainActivity.init();
+    }
+
+    private void setupViewPager(List<Galleryclass> galleryList) {
+        titles = new ArrayList<>();
+        List<Fragment> fragments = new ArrayList<>();
+        titles.add("热门推荐");
+        fragments.add(new HotFragment());
+
+        for (Galleryclass galleryclass : galleryList) {
+            titles.add(galleryclass.getCatName());
+            fragments.add(ListFragment.InstanceFragment(galleryclass.getId()));
+        }
+        FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
+        adapter = new FragmentAdapter(supportFragmentManager, fragments, titles, getActivity());
+        mViewPager.setAdapter(adapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+//        mTabLayout.setTabsFromPagerAdapter(adapter);//不能设置这个否则刷新TAB出错
+//        //1.MODE_SCROLLABLE模式
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);//可以滚动的
+        mViewPager.setOffscreenPageLimit(1);//参数为预加载数量，系统最小值为1。慎用！预加载数量过多低端机子受不了
+    }
+
+    @Override
+    public void setContent(List<Galleryclass> GalleryList) {
+        setupViewPager(GalleryList);//设置内容
+        addClassify.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public Context getContext() {
+        return getActivity();
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void showEmpty() {
+
+    }
+
+    @Override
+    public void showError() {
+
+    }
+
+    @Override
+    public void showContent() {
+
+    }
+
+
+    /**
+     * 选中哪个
+     *
+     * @param selectId
+     */
+    public void selectTab(int selectId) {
+
+        if (selectId < titles.size())
+            mTabLayout.getTabAt(selectId).select();
+    }
+
+
+    /**
+     * 更新栏目
+     */
+    public void setChangeView() {
+        pMainActivity.init();
+    }
+}

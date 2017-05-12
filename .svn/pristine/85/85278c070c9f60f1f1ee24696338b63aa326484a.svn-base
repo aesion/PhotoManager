@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.Life.Light.Default" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
+        <item name="android:windowBackground">@color/background_color_light</item>
+
+        <!-- colorPrimary is used for the default action bar background -->
+        <item name="colorPrimary">@color/colorPrimary_light</item>
+        <item name="android:colorPrimary" tools:ignore="NewApi">@color/colorPrimary_light</item>
+        <item name="android:colorAccent" tools:ignore="NewApi">@color/colorAccent_light</item>
+        <item name="colorAccent" tools:ignore="NewApi">@color/colorAccent_light</item>
+
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark_light</item>
+        <item name="android:colorPrimaryDark" tools:ignore="NewApi">@color/colorPrimaryDark_light
+        </item>
+        <item name="tabIndicatorColor">@color/white_alpha_100</item>
+
+    </style>
+
+    <style name="Theme.Life.Light.NoActionBar" parent="Theme.Life.Light.Default">
+        <item name="windowActionBar">false</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorControlNormal">@color/colorWhite</item>
+    </style>
+
+
+</resources>

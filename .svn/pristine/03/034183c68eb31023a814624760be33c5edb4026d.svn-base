@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.01dp"
+        android:layout_alignParentTop="true"
+        android:background="#D0D0D0"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:drawablePadding="5dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
+
+        <EditText
+            android:id="@+id/et_comment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:hint="写下你的评论..."
+            android:textColor="@color/font_dark"
+            android:background="@drawable/et_comment_bg"
+            android:drawableLeft="@mipmap/ic_edit"
+            android:drawablePadding="5dp"
+            android:textSize="15sp"
+            android:paddingLeft="8dp"
+            android:cursorVisible="false"
+            android:imeOptions="actionSend"
+            android:inputType="text"
+            />
+
+
+        <com.pulamsi.photomanager.widght.fitsystemwindowlayout.ImageViewAppreciate
+            android:id="@+id/ivl_appreciate"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_comment_appreciate"
+            />
+
+        <com.pulamsi.photomanager.widght.fitsystemwindowlayout.ImageViewLike
+            android:id="@+id/ivl_like"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_comment_like"
+            />
+
+        <ImageView
+            android:id="@+id/iv_share"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_comment_share"
+            />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

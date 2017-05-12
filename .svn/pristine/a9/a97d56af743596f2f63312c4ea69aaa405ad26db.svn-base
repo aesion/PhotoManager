@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
+    <RelativeLayout
+        android:id="@+id/view_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        >
+
+        <com.pulamsi.photomanager.widght.fitsystemwindowlayout.InertiaScrollview
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout
+                        android:id="@+id/npl_item_moment_photos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        app:bga_npl_itemCornerRadius="0dp"
+                        app:bga_npl_itemSpanCount="3"
+                        app:bga_npl_itemWhiteSpacing="4dp"
+                        app:bga_npl_itemWidth="0dp"
+                        app:bga_npl_otherWhiteSpacing="0dp"
+                        app:bga_npl_placeholderDrawable="@mipmap/bga_pp_ic_holder_light"
+                        app:bga_npl_showAsLargeWhenOnlyOne="true"/>
+
+                    <TextView
+                        android:id="@+id/tv_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginTop="3dp"
+                        android:text="按时打算打算打算的啊实打实大阿萨德啊实打实大啊实打实大按时打算打算打所大所大所多"
+                        android:textColor="@color/font_dark"
+                        android:textSize="14sp"
+                        />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        >
+
+                        <TextView
+                            android:id="@+id/tv_time"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="left"
+                            android:text="2017-1-4 14:53:10"
+                            android:textColor="@color/font_dark"
+                            android:textSize="12sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_like"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="8dp"
+                            android:drawableLeft="@mipmap/ic_like"
+                            android:text="55"
+                            android:textColor="@color/font_dark"
+                            android:textSize="12sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_appreciate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="8dp"
+                            android:drawableLeft="@mipmap/ic_thumbup"
+                            android:text="124"
+                            android:textColor="@color/font_dark"
+                            android:textSize="12sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_comment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="8dp"
+                            android:drawableLeft="@mipmap/ic_comments"
+                            android:text="555"
+                            android:textColor="@color/font_dark"
+                            android:textSize="12sp"
+                            />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_tag"
+                    android:drawablePadding="8dp"
+                    android:padding="8dp"
+                    android:text="标签:"
+                    android:background="@color/dark_background"
+                    android:textColor="@color/font_dark"
+                    android:textSize="15sp"
+                    />
+
+                <com.pulamsi.photomanager.widght.fitsystemwindowlayout.FlowLayout
+                    android:id="@+id/tag_flowLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:padding="8dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="8dp"
+                    android:padding="8dp"
+                    android:text="评论区:"
+                    android:background="@color/dark_background"
+                    android:textColor="@color/font_dark"
+                    android:textSize="15sp"
+                    />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_comment_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="50dp"
+                        android:background="@color/white"
+                        android:minHeight="180dp"
+                        android:padding="8dp">
+                    </android.support.v7.widget.RecyclerView>
+
+                </FrameLayout>
+            </LinearLayout>
+        </com.pulamsi.photomanager.widght.fitsystemwindowlayout.InertiaScrollview>
+
+
+        <include
+            layout="@layout/image_detail_comment_bar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            ></include>
+
+
+    </RelativeLayout>
+</FrameLayout>

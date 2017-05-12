@@ -1,0 +1,29 @@
+package com.pulamsi.photomanager.viewHolder;
+
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
+
+import com.pulamsi.photomanager.R;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+/**
+ * User: Daidingkang(ddk19941017@Gmail.com)
+ * Date: 2017-01-05
+ * Time: 14:35
+ * FIXME
+ */
+public class CommentItemViewHolder extends RecyclerView.ViewHolder {
+
+    public CircleImageView img;
+    public TextView name,time,content;
+
+    public CommentItemViewHolder(View convertView) {
+        super(convertView);
+        img = (CircleImageView) convertView.findViewById(R.id.civ_img);
+        name = (TextView) convertView.findViewById(R.id.tv_name);
+        time = (TextView) convertView.findViewById(R.id.tv_time);
+        content = (TextView) convertView.findViewById(R.id.tv_content);
+    }
+}

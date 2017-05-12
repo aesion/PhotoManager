@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.youth.banner.Banner
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:image_scale_type="fit_xy"
+            app:indicator_height="8dp"
+            app:indicator_margin="5dp"
+            app:indicator_drawable_selected="@drawable/drawable_selected"
+            app:indicator_drawable_unselected="@drawable/drawable_unselected"
+            app:indicator_width="8dp"/>
+
+        <TextView
+            android:id="@+id/tv_start"
+            android:layout_width="100dp"
+            android:layout_height="35dp"
+            android:text="立即体验"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@drawable/text_bg_selected"
+            android:gravity="center"
+            android:background="@drawable/selector_btn_red_start"
+            android:layout_marginBottom="50dp"
+            />
+
+    </RelativeLayout>
+</LinearLayout>

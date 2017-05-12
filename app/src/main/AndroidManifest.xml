@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    package="com.pulamsi.photomanager"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.SET_DEBUG_APP"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+
+    <application
+        android:name=".base.MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <!--singleTop比如我在通知栏点击后需要启动一个活动，这个就要用到这个模式，否则的话每次点击都会新建一个活动，你可能说怎么会干这个无聊的事，你不会不代表用户不会-->
+        <activity
+            android:name=".view.HomeTabActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+
+        <activity
+            android:name=".view.MainActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.NineCutToolChooseActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.NineCutToolActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.NineCutToolResultActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.PhotoViewerActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.ThemeActicity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.AboutActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.InfoActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.FavoriteActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.SearchActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.LoginActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.SettingActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.SearchListActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.FeedbackActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.DownloadActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.CreateFolderActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.CollectionDetailsActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.UploadSuccessActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.InfoReleaseActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.StartActivity"
+            android:screenOrientation="portrait"
+            ></activity>
+        <activity
+            android:name=".view.InfoDataActivity"
+            android:screenOrientation="portrait"
+            ></activity>
+        <activity android:name=".view.ClassificationManagementActivity"
+                  android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".view.ImageDetailsActivity"
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            >
+        </activity>
+        <activity
+            android:name=".view.UploadActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <!-- alipay callback-->
+
+        <activity
+            android:name=".WBShareActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".apshare.ShareEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+        <activity
+            android:name="com.umeng.qq.tencent.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="tencent100424468"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.umeng.qq.tencent.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+        <activity
+            android:name="com.umeng.socialize.editorpage.ShareActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.UMDefault"
+            />
+
+        <!--融云开始配置-->
+        <!--会话列表-->
+        <activity
+            android:name=".view.ConversationListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.pulamsi.photomanager"
+                    android:pathPrefix="/conversationlist"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+
+        <!--会话界面-->
+        <activity
+            android:name=".view.ConversationActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.pulamsi.photomanager"
+                    android:pathPrefix="/conversation/"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+
+
+        <receiver
+            android:name=".receiver.RongCloudNotificationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="io.rong.push.intent.MESSAGE_ARRIVED" />
+                <action android:name="io.rong.push.intent.MI_MESSAGE_ARRIVED" />
+                <action android:name="io.rong.push.intent.MESSAGE_CLICKED" />
+                <action android:name="io.rong.push.intent.MI_MESSAGE_CLICKED" />
+            </intent-filter>
+        </receiver>
+
+        <!--融云结束配置-->
+
+        <!--友盟API-->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5829559f310c93755600068a">
+        </meta-data>
+
+        <!--BUGHD-->
+        <meta-data android:value="18764bc0713c9332a9f30e3f5f6449f9" android:name="BUG_HD_SDK_GENERAL_KEY" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.pulamsi.photomanager.FileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
+      <!--  //exported:要求必须为false，为true则会报安全异常。
+        //grantUriPermissions:true，表示授予 URI 临时访问权限。-->
+    </application>
+
+</manifest>
